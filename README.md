@@ -1,8 +1,11 @@
 Nicholas Chludzinski - Group6 - Data Functions and Routes
 
+
 !! Below are the commands I used to test my code in Postman !!
 
+
 **TipsGuides**
+
 GET http://localhost:3000/TipsGuides
 
 GET http://localhost:3000/TipsGuides/id
@@ -15,6 +18,7 @@ DELETE http://localhost:3000/TipsGuides/id
 
 
 **businesses**
+
 GET http://localhost:3000/businesses
 
 GET  http://localhost:3000/businesses/id
@@ -37,6 +41,7 @@ DELETE http://localhost:3000/reviews/review/reviewId
 
 
 **forum**
+
 GET http://localhost:3000/forum
 
 GET http://localhost:3000/forum/id
@@ -49,6 +54,7 @@ DELETE http://localhost:3000/forum/id
 
 
 **products**
+
 GET http://localhost:3000/products
 
 GET http://localhost:3000/products/id
@@ -69,6 +75,7 @@ DELETE http://localhost:3000/productReviews/productReview/reviewId
 
 
 **projects**
+
 GET http://localhost:3000/projects
 
 GET http://localhost:3000/projects/id
@@ -81,6 +88,7 @@ DELETE http://localhost:3000/projects/id
 
 
 **users**
+
 GET http://localhost:3000/users
 
 GET http://localhost:3000/users/id
