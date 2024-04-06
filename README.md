@@ -3,11 +3,17 @@ Nicholas Chludzinski - Group6 - Data Functions and Routes
 !! Below are the commands I used to test my code in Postman !!
 
 **TipsGuides**
+
 GET http://localhost:3000/TipsGuides
+
 GET http://localhost:3000/TipsGuides/id
+
 POST http://localhost:3000/TipsGuides
+
 PUT http://localhost:3000/TipsGuides/id
+
 DELETE http://localhost:3000/TipsGuides/id
+
 
 **businesses**
 GET http://localhost:3000/businesses
