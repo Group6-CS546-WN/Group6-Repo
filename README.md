@@ -4,6 +4,7 @@ Nicholas Chludzinski - Group6 - Data Functions and Routes
 !! Below are the commands I used to test my code in Postman !!
 
 
+
 **TipsGuides**
 
 GET http://localhost:3000/TipsGuides
@@ -15,6 +16,7 @@ POST http://localhost:3000/TipsGuides
 PUT http://localhost:3000/TipsGuides/id
 
 DELETE http://localhost:3000/TipsGuides/id
+
 
 
 **businesses**
@@ -40,6 +42,7 @@ PATCH http://localhost:3000/reviews/review/reviewId
 DELETE http://localhost:3000/reviews/review/reviewId
 
 
+
 **forum**
 
 GET http://localhost:3000/forum
@@ -51,6 +54,7 @@ POST http://localhost:3000/forum
 PUT http://localhost:3000/forum/id
 
 DELETE http://localhost:3000/forum/id
+
 
 
 **products**
@@ -74,6 +78,7 @@ PATCH http://localhost:3000/productReviews/productReview/reviewId
 DELETE http://localhost:3000/productReviews/productReview/reviewId
 
 
+
 **projects**
 
 GET http://localhost:3000/projects
@@ -85,6 +90,7 @@ POST http://localhost:3000/projects
 PUT http://localhost:3000/projects/id
 
 DELETE http://localhost:3000/projects/id
+
 
 
 **users**
