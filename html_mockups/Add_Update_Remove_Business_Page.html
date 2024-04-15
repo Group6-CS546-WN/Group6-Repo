@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Sustainable Businesses</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; color: #333; background-color: #f4f4f4; }
+        .container { max-width: 1200px; margin: auto; padding: 20px; }
+        header, footer { background: #333; color: #fff; padding: 10px 0; text-align: center; }
+        h1, h2 { color: #008000; }
+        p { margin: 20px 0; }
+        .button { display: inline-block; padding: 10px 20px; margin: 10px 0; background: #008000; color: white; text-decoration: none; border-radius: 5px; }
+        input, textarea { width: 100%; padding: 8px; margin: 10px 0; box-sizing: border-box; }
+        label { display: block; margin: 15px 0 5px; }
+        form { background: white; padding: 20px; border: 1px solid #ddd; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin: 10px 0; padding: 10px; background: white; border: 1px solid #ddd; }
+        .edit, .delete { color: red; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Manage Sustainable Businesses</h1>
+        </div>
+    </header>
+    <div class="container">
+        <form action="/add-business" method="post">
+            <label for="name">Business Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter business name">
+            <label for="type">Business Type:</label>
+            <input type="text" id="type" name="type" placeholder="Type of business">
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" placeholder="Business address">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" placeholder="Describe the business"></textarea>
+            <label for="link">Website Link:</label>
+            <input type="text" id="link" name="link" placeholder="http://">
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" name="phone" placeholder="Phone number">
+            <button type="submit" class="button">Add Business</button>
+        </form>
+        <h2>Your Added Businesses</h2>
+        <ul>
+            {{#each userBusinesses}}
+            <li>
+                <p>{{this.name}} - {{this.type}}</p>
+                <span class="edit" onclick="location.href='/edit/{{this.id}}'">Edit</span> | 
+                <span class="delete" onclick="location.href='/delete/{{this.id}}'">Delete</span>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+    <footer>
+        <div class="container">
+            <p>Contact Us: info@klimate.com | Follow us on social media</p>
+        </div>
+    </footer>
+</body>
+</html>
