@@ -1,14 +1,14 @@
-// This file should set up the express server as shown in the lecture code
 import express from 'express';
+import calculatorRoutes from './routes/calculator.js';
+
 const app = express();
-import configRoutes from './routes/index.js';
+const port = 3000;
 
 app.use(express.json());
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+app.use(calculatorRoutes); 
 
-configRoutes(app);
-
-app.listen(3000, () => {
-  console.log("We've now got a server!");
-  console.log('Your routes will be running on http://localhost:3000');
+app.listen(port, () => {
+    console.log(`Server is listening at http://localhost:${port}`);
 });
-
