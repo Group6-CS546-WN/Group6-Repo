@@ -1,19 +1,20 @@
 {
-  "name": "group6",
+  "name": "businesses",
   "version": "1.0.0",
-  "description": "This is group6 data",
+  "description": "",
   "main": "app.js",
   "type": "module",
   "scripts": {
     "seed": "node ./tasks/seed.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "nodemon app.js"
   },
-  "author": "Nicholas Chludzinski",
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.6.8",
-    "express": "^4.19.1",
-    "mongodb": "^6.5.0"
+    "express": "^4.19.2",
+    "express-handlebars": "^7.1.2",
+    "mongodb": "^6.5.0",
+    "nodemon": "^3.1.0"
   }
 }

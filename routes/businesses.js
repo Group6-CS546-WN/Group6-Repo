@@ -1,119 +1,113 @@
-// Import the express router as shown in the lecture code
 import {Router} from 'express';
 const router = Router();
-import {create, get, remove, update, getAll} from '../data/businesses.js';
-// Note: please do not forget to export the router!
+import {businessData, userData} from '../data/index.js';
+import validation from '../validation.js';
 
-//our function options from data/products are.. create, getAll, get, update, and remove
-
-//router.route('/').get(async (req, res) => {...                  corresponds to the **getALL** function from data/products.js
-//.post(async (req, res) => {...                                  corresponds to the **create** function from in data/products.js
-//router.route('/:productId').get(async (req, res) => {...        corresponds to the **get** function from data/products.js
-//.delete(async (req, res) => {...                                corresponds to the **remove** function from data/products.js
-//.put(async (req, res) => {...                                   corresponds to the **update** function from data/products.js
-
-//-------------------------------------------------------------------------------------------------- .get
-
+router.route('/new').get(async (req, res) => {
+  const business = await businessData.getAll();
+  res.render('businesses/new', {business: business});
+});
 router
   .route('/')
   .get(async (req, res) => {
-    //code here for GET
-   
-
     try {
-      
-      const correctFormat = await getAll();
-     
-     
-      return res.json(correctFormat);
+      const businessList = await businessData.getAll();
+      res.render('businesses/index', {businesses: businessList});
     } catch (e) {
-      return res.status(400).json(e);
+      res.status(500).json({error: e});
     }
   })
-
-  //-------------------------------------------------------------------------------------------------- .post
-
   .post(async (req, res) => {
-    //code here for POST
-
-
-    //insert the post
+    const businessData = req.body;
+    let errors = [];
     try {
-      const { businessName, type, address, description, link, phoneNumber } = req.body;/////////////////////////////////
-      const newProducts = await create(businessName, type, address, description, link, phoneNumber);
-      return res.json(newProducts);
+      businessData.businessName = validation.checkString(businessData.businessName, 'Name');
     } catch (e) {
-      return res.status(400).json(e);
+      errors.push(e);
     }
+
+    try {
+      businessData.type = validation.checkString(businessData.type, 'Type');
+    } catch (e) {
+      errors.push(e);
+    }
+
+    try {
+      businessData.address = validation.checkString(businessData.address, 'Address');
+    } catch (e) {
+      errors.push(e);
+    }
+
+    try {
+      businessData.description = validation.checkString(businessData.description, 'Description');
+    } catch (e) {
+      errors.push(e);
+    }
+
+    try {
+     // businessData.link = validation.checkString(businessData.link, 'Website');
+    } catch (e) {
+      errors.push(e);
+    }
+
+    try {
+    //  businessData.phoneNumber = validation.checkNumber(businessData.phoneNumber, 'Phone Number');
+    } catch (e) {
+      errors.push(e);
+    }
+
+    if (errors.length > 0) {
+      res.render('businesses/new', {
+        errors: errors,
+        hasErrors: true,
+        business: businessData,
+      });
+      return;
+    }
+
+    try {
+      const {businessName, type, address, description, link, phoneNumber} = businessData;
+      const newBusiness = await businessData.create(businessName, type, address, description, link, phoneNumber);
+      res.redirect(`/businesses/${newBusiness._id}`);
+    } catch (e) {
+      res.status(500).json({error: e});
+    }
+  })
+  .put(async (req, res) => {
+    res.send('ROUTED TO PUT ROUTE');
   });
-
-
-//-------------------------------------------------------------------------------------------------- .get
-
 
 router
-  .route('/:businessId')
+  .route('/:id')
   .get(async (req, res) => {
-
-
-
     try {
-      const prod = await get(req.params.businessId);
-      return res.json(prod);
+      req.params.id = validation.checkId(req.params.id, 'Id URL Param');
     } catch (e) {
-        //lecture code and live session says to use .json below, not .send 
-      return res.status(400).json(e);
+      return res.status(400).json({error: e});
+    }
+    try {
+      const business = await businessData.get(req.params.id);
+      res.render('businesses/single', {business: business});
+    } catch (e) {
+      res.status(404).json({error: e});
     }
   })
-
-
-//-------------------------------------------------------------------------------------------------- .delete
-
 
   .delete(async (req, res) => {
-    //code here for DELETE
-
-
-
-    //try to delete product
     try {
-      await remove(req.params.businessId);
-      return res.json({ "_id": req.params.businessId, "deleted": true});
+      req.params.id = validation.checkId(req.params.id, 'Id URL Param');
     } catch (e) {
-      return res.status(400).json(e);
+      return res.status(400).json({error: e});
     }
-
-  })
-
-  //-------------------------------------------------------------------------------------------------- .put
-
-  .put(async (req, res) => {
- 
-
-
     try {
-      const productInfo = req.body;
-      
-      
-      const updatedProd = await update(
-        req.params.businessId, 
-        productInfo.businessName,
-        productInfo.type, 
-        productInfo.address, 
-        productInfo.description, 
-        productInfo.link, 
-        productInfo.phoneNumber, 
-        );
-
-     
-      return res.json(updatedProd);
+      let deletedBusiness = await businessData.remove(req.params.id);
+      res.status(200).json(deletedBusiness);
     } catch (e) {
-      return res.status(400).json(e);
+      let status = e[0];
+      let message = e[1];
+      res.status(status).json({error: message});
     }
   });
 
-  
 
-//--------------------------------------------------------------------------------------------------
-
-  export default router;
+export default router;

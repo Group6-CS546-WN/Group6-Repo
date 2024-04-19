@@ -1,120 +1,137 @@
-// Import the express router as shown in the lecture code
 import {Router} from 'express';
 const router = Router();
-import {createUsers, getUsers, removeUsers, updateUsers, getAllUsers} from '../data/users.js';
-// Note: please do not forget to export the router!
-
-//our function options from data/products are.. create, getAll, get, update, and remove
-
-//router.route('/').get(async (req, res) => {...                  corresponds to the **getALL** function from data/products.js
-//.post(async (req, res) => {...                                  corresponds to the **create** function from in data/products.js
-//router.route('/:productId').get(async (req, res) => {...        corresponds to the **get** function from data/products.js
-//.delete(async (req, res) => {...                                corresponds to the **remove** function from data/products.js
-//.put(async (req, res) => {...                                   corresponds to the **update** function from data/products.js
-
-//-------------------------------------------------------------------------------------------------- .get
+import {userData} from '../data/index.js';
+import validation from '../validation.js';
 
 router
   .route('/')
   .get(async (req, res) => {
-    //code here for GET
-   
-
     try {
-      
-      const correctFormat = await getAllUsers();
-     
-     
-      return res.json(correctFormat);
+      let userList = await userData.getAllUsers();
+      res.json(userList);
     } catch (e) {
-      return res.status(400).json(e);
+      res.sendStatus(500);
     }
   })
-
-  //-------------------------------------------------------------------------------------------------- .post
-
   .post(async (req, res) => {
-    //code here for POST
+    let userInfo = req.body;
 
-
-    //insert the post
     try {
-      const { firstName, lastName, email, username, age, /*dateJoined,*/ carbonFootprint } = req.body;/////////////////////////////////
-      const newProducts = await createUsers(firstName, lastName, email, username, age, /*dateJoined,*/ carbonFootprint);
-      return res.json(newProducts);
+      userInfo.firstName = validation.checkString(
+        userInfo.firstName,
+        'First Name'
+      );
+      userInfo.lastName = validation.checkString(
+        userInfo.lastName,
+        'Last Name'
+      );
     } catch (e) {
-      return res.status(400).json(e);
+      return res.status(400).json({error: e});
+    }
+
+    try {
+      const newUser = await userData.addUser(
+        userInfo.firstName,
+        userInfo.lastName
+      );
+      res.json(newUser);
+    } catch (e) {
+      res.sendStatus(500);
     }
   });
-
-
-//-------------------------------------------------------------------------------------------------- .get
-
 
 router
-  .route('/:userId')
+  .route('/:id')
   .get(async (req, res) => {
-
-
-
     try {
-      const prod = await getUsers(req.params.userId);
-      return res.json(prod);
+      req.params.id = validation.checkId(req.params.id, 'ID URL Param');
     } catch (e) {
-        //lecture code and live session says to use .json below, not .send 
-      return res.status(400).json(e);
+      return res.status(400).json({error: e});
+    }
+    try {
+      let user = await userData.getUserById(req.params.id);
+      res.json(user);
+    } catch (e) {
+      res.status(404).json({error: 'User not found'});
     }
   })
-
-
-//-------------------------------------------------------------------------------------------------- .delete
-
-
-  .delete(async (req, res) => {
-    //code here for DELETE
-
-
-
-    //try to delete product
-    try {
-      await removeUsers(req.params.userId);
-      return res.json({ "_id": req.params.userId, "deleted": true});
-    } catch (e) {
-      return res.status(400).json(e);
-    }
-
-  })
-
-  //-------------------------------------------------------------------------------------------------- .put
-
   .put(async (req, res) => {
- 
-
+    let userInfo = req.body;
+    try {
+      req.params.id = validation.checkId(req.params.id);
+      userInfo.firstName = validation.checkString(
+        userInfo.firstName,
+        'First Name'
+      );
+      userInfo.lastName = validation.checkString(
+        userInfo.lastName,
+        'Last Name'
+      );
+    } catch (e) {
+      return res.status(400).json({error: e});
+    }
 
     try {
-      const productInfo = req.body;
-      
-      
-      const updatedProd = await updateUsers(
-        req.params.userId, 
-        productInfo.firstName,
-        productInfo.lastName, 
-        productInfo.email, 
-        productInfo.username, 
-        productInfo.age, 
-        //productInfo.dateJoined, 
-        productInfo.carbonFootprint, 
-        );
-
-     
-      return res.json(updatedProd);
+      const updatedUser = await userData.updateUserPut(
+        req.params.id,
+        userInfo.firstName,
+        userInfo.lastName
+      );
+      res.json(updatedUser);
     } catch (e) {
-      return res.status(400).json(e);
+      let status = e[0];
+      let message = e[1];
+      res.status(status).send({error: message});
+    }
+  })
+  .patch(async (req, res) => {
+    let userInfo = req.body;
+    try {
+      req.params.id = validation.checkId(req.params.id);
+      if (userInfo.firstName) {
+        userInfo.firstName = validation.checkString(
+          userInfo.firstName,
+          'First Name'
+        );
+      }
+
+      if (userInfo.lastName) {
+        userInfo.lastName = validation.checkString(
+          userInfo.lastName,
+          'Last Name'
+        );
+      }
+    } catch (e) {
+      return res.status(400).json({error: e});
+    }
+
+    try {
+      const updatedUser = await userData.updateUserPatch(
+        req.params.id,
+        userInfo
+      );
+      res.json(updatedUser);
+    } catch (e) {
+      let status = e[0];
+      let message = e[1];
+      res.status(status).send({error: message});
+    }
+  })
+  .delete(async (req, res) => {
+    try {
+      req.params.id = validation.checkId(req.params.id);
+    } catch (e) {
+      return res.status(400).json({error: e});
+    }
+
+    try {
+      let deletedUser = await userData.removeUser(req.params.id);
+      res.json(deletedUser);
+    } catch (e) {
+      let status = e[0];
+      let message = e[1];
+      res.status(status).send({error: message});
     }
   });
 
-  
-
-//--------------------------------------------------------------------------------------------------
-
-  export default router;
+export default router;

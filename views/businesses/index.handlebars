@@ -1,0 +1,9 @@
+<section>
+  <h1>Sustainable Businesses</h1>
+  {{#each business}}
+  <article class="business">
+    <h2><a href="/businesses/{{_id}}">{{name}}</a></h2>
+    <p>{{body}}</p>
+  </article>
+  {{/each}}
+</section>
