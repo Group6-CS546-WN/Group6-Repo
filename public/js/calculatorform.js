@@ -1,4 +1,6 @@
 function calculateCarbonFootprint(data) {
+
+  
     const {
         electricBill,
         gasBill,
@@ -9,9 +11,6 @@ function calculateCarbonFootprint(data) {
         recycleNewspaper,
         recycleMetal
     } = data;
-
-    // if (typeof electricBill !== 'number' || typeof gasBill !== 'number' || typeof oilBill !== 'number' || typeof carMileage !== 'number' || typeof shortFlights !== 'number' || typeof longFlights !== 'number' || typeof recycleNewspaper !== 'boolean' || typeof recycleMetal !== 'boolean') {
-    // throw new Error('Please check input values');
 
 
     const carbonFootprint =
@@ -55,41 +54,45 @@ if (carbonForm) {
         errorContainer.classList.add('hidden');
         resultContainer.classList.add('hidden');
 
-        const electricBillValue = electricBillElement.value;
-        const gasBillValue = gasBillElement.value;
-        const oilBillValue = oilBillElement.value;
-        const carMileageValue = carMileageElement.value;
-        const shortFlightsValue = shortFlightsElement.value;
-        const longFlightsValue = longFlightsElement.value;
-        const recycleNewspaperValue = recycleNewspaperElement.value;
-        const recycleMetalValue = recycleMetalElement.value;
+        console.log('Electric Bill:', electricBillElement.value);
+        console.log('Gas Bill:', gasBillElement.value);
+        console.log('Oil Bill:', oilBillElement.value);
+        console.log('Car Mileage:', carMileageElement.value);
+        console.log('Short Flights:', shortFlightsElement.value);
+        console.log('Long Flights:', longFlightsElement.value);
+        console.log('Recycle Newspaper:', recycleNewspaperElement.checked);
+        console.log('Recycle Metal:', recycleMetalElement.checked);
 
-        const parsedElectricBillValue = parseInt(electricBillValue);
-        const parsedGasBillValue = parseInt(gasBillValue);
-        const parsedOilBillValue = parseInt(oilBillValue);
-        const parsedCarMileageValue = parseInt(carMileageValue);
-        const parsedShortFlightsValue = parseInt(shortFlightsValue);
-        const parsedLongFlightsValue = parseInt(longFlightsValue);
+        const electricBillValue = parseInt(electricBillElement.value);
+        const gasBillValue = parseInt(gasBillElement.value);
+        const oilBillValue = parseInt(oilBillElement.value);
+        const carMileageValue = parseInt(carMileageElement.value);
+        const shortFlightsValue = parseInt(shortFlightsElement.value);
+        const longFlightsValue = parseInt(longFlightsElement.value);
+        const recycleNewspaperValue = recycleNewspaperElement.checked; 
+        const recycleMetalValue = recycleMetalElement.checked; 
 
-        const result = carbonFootprint(
-            parsedElectricBillValue,
-            parsedGasBillValue,
-            parsedOilBillValue,
-            parsedCarMileageValue,
-            parsedShortFlightsValue,
-            parsedLongFlightsValue,
+        const userInput = [
+            electricBillValue,
+            gasBillValue,
+            oilBillValue,
+            carMileageValue,
+            shortFlightsValue,
+            longFlightsValue,
             recycleNewspaperValue,
             recycleMetalValue
-        );
-
-        resultTextElement.textContent = 'Your carbon footprint is ' + result;
-        console.log(`${result}`);
-        resultContainer.classList.remove('hidden');
-      } catch (e) {
-        const message = typeof e === 'string' ? e : e.message;
+        ];
+        const carbonFootprint = calculateCarbonFootprint(userInput);
+        resultTextElement.textContent = 'Your carbon footprint is ' + carbonFootprint;
+        console.log(`${carbonFootprint}`);
+        resultContainer.classList.remove('hidden'); // Show the result container
+    } catch (e) {
+        //const message = typeof e === 'string' ? e : e.message;
         errorTextElement.textContent = e;
         errorContainer.classList.remove('hidden');
-      }
-    });
+    }
+});
+
+   
   };
 

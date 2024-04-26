@@ -12,6 +12,16 @@ header {
    
 }
 
+#sBiD {
+    color: grey;
+    font-weight: bolder;
+}
+
+#pId {
+    color: rgb(44, 37, 185);
+    font-weight: bolder;
+}
+
 nav {
     margin-top: 20px;
 }
@@ -70,4 +80,15 @@ p {
     color: #180d6d;
     font-size: 16px;
     line-height: 1.5;
+}
+
+
+#result_div {
+    color:rgb(33, 95, 40);
+    font-weight: bolder
+}
+
+#error_div {
+    color:rgb(224, 19, 19);
+    font-weight: bolder
 }
