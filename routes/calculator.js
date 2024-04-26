@@ -8,18 +8,20 @@ router.get('/', (req, res) => {
 
 // POST route for calculating carbon footprint
 router.post('/', (req, res) => {
-    let electricBill = parseInt('req.body.electricBill');
-    let gasBill = parseInt('req.body.gasBill');
-    let oilBill = parseInt('req.body.oilBill');
-    let carMileage = parseInt('req.body.carMileage');
-    let shortFlights = parseInt('req.body.shortFlights');
-    let longFlights = parseInt('req.body.longFlights');
-    let recycleNewspaper = (req.body.recycleNewspaper);
-    let recycleMetal = (req.body.recycleMetal);
-    let result;
+    let electricBill = parseInt(req.body.electricBill);
+    let gasBill = parseInt(req.body.gasBill);
+    let oilBill = parseInt(req.body.oilBill);
+    let carMileage = parseInt(req.body.carMileage);
+    let shortFlights = parseInt(req.body.shortFlights);
+    let longFlights = parseInt(req.body.longFlights);
+    let recycleNewspaper = req.body.recycleNewspaper === 'true';
+    let recycleMetal = req.body.recycleMetal === 'true';
+
+    let carbonFootprint;
+    
 
     try {
-        const result = calculateCarbonFootprint({
+        const userInput = ({
             electricBill: electricBill,
             gasBill: gasBill,
             oilBill: oilBill,
@@ -29,22 +31,8 @@ router.post('/', (req, res) => {
             recycleNewspaper: recycleNewspaper,
             recycleMetal: recycleMetal
         })
-        console.log('result', result);
-    } catch (e) {
-        return res.render('calculator', {
-            electricBill: electricBill,
-            gasBill: gasBill,
-            oilBill: oilBill,
-            carMileage: carMileage,
-            shortFlights: shortFlights,
-            longFlights: longFlights,
-            recycleNewspaper: recycleNewspaper,
-            recycleMetal: recycleMetal,
-            error: e,
-            partial: 'server_script'
-          });
-        }
 
+        carbonFootprint = calculateCarbonFootprint(userInput);
         return res.render('calculator', { 
             electricBill: electricBill,
             gasBill: gasBill,
@@ -54,10 +42,29 @@ router.post('/', (req, res) => {
             longFlights: longFlights,
             recycleNewspaper: recycleNewspaper,
             recycleMetal: recycleMetal,
-            result: result,
-            partial: 'server_script'
+            result: carbonFootprint,
+            partial: 'static_script'
          });
+     
+    } catch (e) {
+        return res.status(400).render('calculator', {
+            electricBill: electricBill,
+            gasBill: gasBill,
+            oilBill: oilBill,
+            carMileage: carMileage,
+            shortFlights: shortFlights,
+            longFlights: longFlights,
+            recycleNewspaper: recycleNewspaper,
+            recycleMetal: recycleMetal,
+            error: e,
+            result: carbonFootprint,
+            partial: 'static_script'
+          });
+        }
+
+        
     });   
+
    
 
 export default router;
