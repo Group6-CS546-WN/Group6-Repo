@@ -51,7 +51,7 @@ return usersList;
 
 //---------------------------------------------------------- create
 
-export const createUsers = async ({
+export const createUsers = async (
   firstName,
   lastName,
   email,
@@ -60,7 +60,7 @@ export const createUsers = async ({
   age,
   //dateJoined,
   carbonFootprint
-}) => {
+) => {
 
 
   //Error checks ooooooooooooooooooooooo
