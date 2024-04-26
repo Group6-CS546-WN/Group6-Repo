@@ -309,4 +309,3 @@ return parseFloat(avgRating);
 
 
 
-

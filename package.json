@@ -1,22 +1,25 @@
 {
-  "name": "group6",
+  "name": "group6-final-project-cs546",
   "version": "1.0.0",
-  "description": "This is group6 data",
+  "description": "",
   "main": "app.js",
   "type": "module",
   "scripts": {
     "seed": "node ./tasks/seed.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "nodemon app.js"
   },
-  "author": "Olaoluwa Olasanoye",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.6.8",
-    "bcryptjs": "^2.4.3",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-handlebars": "^7.1.2",
     "express-session": "^1.18.0",
-    "mongodb": "^6.5.0"
+    "mongod": "^2.0.0",
+    "mongosh": "^2.2.4",
+    "nodemon": "^3.1.0"
   }
 }

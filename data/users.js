@@ -6,28 +6,25 @@ import {ObjectId} from 'mongodb';
 
 //---------------------------------------------------- get
 
-export const getUsers = async (userId) => {
-
+export const getUserById = async (userId) => {
   let x = new ObjectId();
-
     //Error checks ooooooooooooooooooooooo
-
     if (!userId) throw 'Error: You must provide an id to search for';
     if (typeof userId !== 'string') throw 'Error: Id must be a string';
     if (userId.trim().length === 0) throw 'Error: Id cannot be an empty string or just spaces';
     userId = userId.trim();
     if (!ObjectId.isValid(userId)) throw 'Error: Invalid object ID';
-
     //end error checks ooooooooooooooooooooooo
-
-  
     const usersCollection = await users();
     const p = await usersCollection.findOne({_id: new ObjectId(userId)});
     if (p === null || !p) throw 'Error: No user with that id';
     p._id = p._id.toString();
     return p;
+};
 
-
+export const getUserByUsername = async (username) => {
+    const usersCollection = await users();
+    return await usersCollection.findOne({username});
 };
 
 //---------------------------------------------------- getAll
@@ -54,32 +51,33 @@ return usersList;
 
 //---------------------------------------------------------- create
 
-export const createUsers = async (
+export const createUsers = async ({
   firstName,
   lastName,
   email,
   username,
+  password,
   age,
   //dateJoined,
   carbonFootprint
-) => {
+}) => {
 
 
   //Error checks ooooooooooooooooooooooo
 
-  if (!firstName) throw 'Error: Input missing firstName!';
-  if (!lastName) throw 'Error: Input missing lastName!';
-  if (!email) throw 'Error: Input missing email!';
-  if (!username) throw 'Error: Input missing username!';
-  if (!age) throw 'Error: Input missing age!';
-  //if (!dateJoined) throw 'Error: Input missing dateJoined!';
-  if (!carbonFootprint) throw 'Error: Input missing carbonFootprint!';
+//   if (!firstName) throw 'Error: Input missing firstName!';
+//   if (!lastName) throw 'Error: Input missing lastName!';
+//   if (!email) throw 'Error: Input missing email!';
+//   if (!username) throw 'Error: Input missing username!';
+//   if (!age) throw 'Error: Input missing age!';
+//   //if (!dateJoined) throw 'Error: Input missing dateJoined!';
+//   if (!carbonFootprint) throw 'Error: Input missing carbonFootprint!';
 
- if (typeof firstName !== 'string' || typeof lastName !== 'string' || typeof email !== 'string' || typeof username !== 'string' /*|| typeof dateJoined !== 'string'*/) throw 'Error: Given input incorrect type!';
- if (firstName.trim().length === 0 || lastName.trim().length === 0 || email.trim().length === 0 || username.trim().length === 0 /*|| dateJoined.trim().length === 0*/) throw 'Error: Cannot be empty string!';
+//  if (typeof firstName !== 'string' || typeof lastName !== 'string' || typeof email !== 'string' || typeof username !== 'string' /*|| typeof dateJoined !== 'string'*/) throw 'Error: Given input incorrect type!';
+//  if (firstName.trim().length === 0 || lastName.trim().length === 0 || email.trim().length === 0 || username.trim().length === 0 /*|| dateJoined.trim().length === 0*/) throw 'Error: Cannot be empty string!';
 
- if (typeof age !== 'number') throw 'Error: age must be a number';
- if (typeof carbonFootprint !== 'number') throw 'Error: carbon footprint must be a number';
+//  if (typeof age !== 'number') throw 'Error: age must be a number';
+//  if (typeof carbonFootprint !== 'number') throw 'Error: carbon footprint must be a number';
 
  //we must make the date in mm/dd/yyyy format (2 for month, 2 for day, 4 for year) using padding
  const nowDate = new Date();
@@ -103,6 +101,7 @@ let newUsers = {
   lastName: lastName,
   email: email,
   username: username,
+  password,
   age: age,
   dateJoined: dateJoined,
   carbonFootprint: carbonFootprint,
@@ -118,7 +117,7 @@ if (!insertInfo.acknowledged || !insertInfo.insertedId)
 
 const newId = insertInfo.insertedId.toString();
 
-const prod = await getUsers(newId);
+const prod = await getUserById(newId);
 return prod;
 
 };

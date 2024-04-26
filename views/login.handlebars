@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Klimate</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; color: #333; background-color: #f4f4f4; }
+        .container { max-width: 600px; margin: auto; padding: 20px; }
+        header, footer { background: #333; color: #fff; padding: 10px 0; text-align: center; }
+        h1 { color: #008000; }
+        form { background: white; padding: 20px; border: 1px solid #ddd; margin-top: 20px; }
+        label { display: block; margin-bottom: 10px; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 8px; margin-bottom: 20px; box-sizing: border-box; }
+        .button { display: block; width: 100%; padding: 10px; background: #008000; color: white; text-decoration: none; border: none; border-radius: 5px; cursor: pointer; }
+        a { color: #008000; text-decoration: none; display: block; text-align: center; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Login to Klimate</h1>
+        </div>
+    </header>
+    <div class="container">
+        <form action="/login" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password">
+            <button type="submit" class="button">Log In</button>
+        </form>
+        <a href="/forgot-password">Forgot Password?</a>
+        <a href="/register">Sign Up</a>
+    </div>
+    <footer>
+        <div class="container">
+            <p>Contact Us: info@klimate.com | Follow us on social media</p>
+        </div>
+    </footer>
+</body>
+</html>

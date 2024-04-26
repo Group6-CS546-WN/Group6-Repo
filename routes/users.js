@@ -1,7 +1,7 @@
 // Import the express router as shown in the lecture code
 import {Router} from 'express';
 const router = Router();
-import {createUsers, getUsers, removeUsers, updateUsers, getAllUsers} from '../data/users.js';
+import {createUsers, getUserById, removeUsers, updateUsers, getAllUsers} from '../data/users.js';
 // Note: please do not forget to export the router!
 
 //our function options from data/products are.. create, getAll, get, update, and remove
@@ -58,7 +58,7 @@ router
 
 
     try {
-      const prod = await getUsers(req.params.userId);
+      const prod = await getUserById(req.params.userId);
       return res.json(prod);
     } catch (e) {
         //lecture code and live session says to use .json below, not .send 

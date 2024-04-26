@@ -6,6 +6,7 @@ import TipsGuidesDataFunctions from './TipsGuides.js';
 import forumDataFunctions from './forum.js';
 import productsDataFunctions from './products.js';
 import productReviewsDataFunctions from './productReviews.js';
+import calculatorDataFunctions from './calculator.js';
 
 export const businessesData = businessesDataFunctions;
 export const reviewsData = reviewsDataFunctions;
@@ -14,3 +15,4 @@ export const TipsGuidesData = TipsGuidesDataFunctions;
 export const forumData = forumDataFunctions;
 export const productsData = productsDataFunctions;
 export const productReviewsData = productReviewsDataFunctions;
+export const calculatorData = calculatorDataFunctions;

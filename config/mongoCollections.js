@@ -32,4 +32,3 @@ export const forum = getCollectionFn('forum');
 
 //collection for products
 export const products = getCollectionFn('products');
-

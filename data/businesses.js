@@ -229,4 +229,4 @@ const businessCollection = await businesses();
     { _id: new ObjectId(businessId)},
     { $set: {averageRating: newAvg}}
   );
-};
+}; 

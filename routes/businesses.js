@@ -1,119 +1,101 @@
-// Import the express router as shown in the lecture code
-import {Router} from 'express';
+import { Router } from 'express';
+import { create, get, remove, update, getAll } from '../data/businesses.js';
+import validation from '../validation.js';
+import { authGuard } from '../middleware.js'; // Ensure this is correctly imported
+
 const router = Router();
-import {create, get, remove, update, getAll} from '../data/businesses.js';
-// Note: please do not forget to export the router!
 
-//our function options from data/products are.. create, getAll, get, update, and remove
+// Apply authGuard middleware to all routes managed by this router to ensure they are protected
+router.use(authGuard);
 
-//router.route('/').get(async (req, res) => {...                  corresponds to the **getALL** function from data/products.js
-//.post(async (req, res) => {...                                  corresponds to the **create** function from in data/products.js
-//router.route('/:productId').get(async (req, res) => {...        corresponds to the **get** function from data/products.js
-//.delete(async (req, res) => {...                                corresponds to the **remove** function from data/products.js
-//.put(async (req, res) => {...                                   corresponds to the **update** function from data/products.js
+// Route to display a form for creating a new business
+router.route('/new').get(async (req, res) => {
+  const business = await getAll();
+  res.render('businesses/new', { business: business });
+});
 
-//-------------------------------------------------------------------------------------------------- .get
-
-router
-  .route('/')
+// Route to handle the main business listing and creation of a new business
+router.route('/')
   .get(async (req, res) => {
-    //code here for GET
-   
-
     try {
-      
-      const correctFormat = await getAll();
-     
-     
-      return res.json(correctFormat);
+      const businessList = await getAll();
+      res.render('businesses/index', { businesses: businessList });
     } catch (e) {
-      return res.status(400).json(e);
+      res.status(500).json({ error: e.message });
     }
   })
-
-  //-------------------------------------------------------------------------------------------------- .post
-
   .post(async (req, res) => {
-    //code here for POST
-
-
-    //insert the post
+    const businessData = req.body;
+    let errors = [];
     try {
-      const { businessName, type, address, description, link, phoneNumber } = req.body;/////////////////////////////////
-      const newProducts = await create(businessName, type, address, description, link, phoneNumber);
-      return res.json(newProducts);
+      businessData.businessName = validation.checkString(businessData.businessName, 'Name');
     } catch (e) {
-      return res.status(400).json(e);
+      errors.push(e);
+    }
+    try {
+      businessData.type = validation.checkString(businessData.type, 'Type');
+    } catch (e) {
+      errors.push(e);
+    }
+    try {
+      businessData.address = validation.checkString(businessData.address, 'Address');
+    } catch (e) {
+      errors.push(e);
+    }
+    try {
+      businessData.description = validation.checkString(businessData.description, 'Description');
+    } catch (e) {
+      errors.push(e);
+    }
+    // Uncomment below if website link and phone number validations are needed
+    // try {
+    //   businessData.link = validation.checkString(businessData.link, 'Website');
+    // } catch (e) {
+    //   errors.push(e);
+    // }
+    // try {
+    //   businessData.phoneNumber = validation.checkNumber(businessData.phoneNumber, 'Phone Number');
+    // } catch (e) {
+    //   errors.push(e);
+    // }
+    if (errors.length > 0) {
+      res.render('businesses/new', {
+        errors: errors,
+        hasErrors: true,
+        business: businessData
+      });
+      return;
+    }
+    try {
+      const { businessName, type, address, description, link, phoneNumber } = businessData;
+      const newBusiness = await create(businessName, type, address, description, link, phoneNumber);
+      res.redirect(`/businesses/${newBusiness._id}`);
+    } catch (e) {
+      res.status(500).json({ error: e });
     }
   });
 
-
-//-------------------------------------------------------------------------------------------------- .get
-
-
-router
-  .route('/:businessId')
+// Routes for specific business ID operations
+router.route('/:id')
   .get(async (req, res) => {
-
-
-
     try {
-      const prod = await get(req.params.businessId);
-      return res.json(prod);
+      req.params.id = validation.checkId(req.params.id, 'Id URL Param');
+      const business = await get(req.params.id);
+      res.render('businesses/single', { business: business });
     } catch (e) {
-        //lecture code and live session says to use .json below, not .send 
-      return res.status(400).json(e);
+      res.status(404).json({ error: e });
     }
   })
-
-
-//-------------------------------------------------------------------------------------------------- .delete
-
-
   .delete(async (req, res) => {
-    //code here for DELETE
-
-
-
-    //try to delete product
     try {
-      await remove(req.params.businessId);
-      return res.json({ "_id": req.params.businessId, "deleted": true});
+      req.params.id = validation.checkId(req.params.id, 'Id URL Param');
+      let deletedBusiness = await remove(req.params.id);
+      res.status(200).json(deletedBusiness);
     } catch (e) {
-      return res.status(400).json(e);
-    }
-
-  })
-
-  //-------------------------------------------------------------------------------------------------- .put
-
-  .put(async (req, res) => {
- 
-
-
-    try {
-      const productInfo = req.body;
-      
-      
-      const updatedProd = await update(
-        req.params.businessId, 
-        productInfo.businessName,
-        productInfo.type, 
-        productInfo.address, 
-        productInfo.description, 
-        productInfo.link, 
-        productInfo.phoneNumber, 
-        );
-
-     
-      return res.json(updatedProd);
-    } catch (e) {
-      return res.status(400).json(e);
+      let status = e[0];
+      let message = e[1];
+      res.status(status).json({ error: message });
     }
   });
 
-  
-
-//--------------------------------------------------------------------------------------------------
-
-  export default router;
+export default router;
